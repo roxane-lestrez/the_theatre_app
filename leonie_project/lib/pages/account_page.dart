@@ -97,6 +97,12 @@ class AccountPageState extends ConsumerState<AccountPage> with RouteAware {
     }
   }
 
+  void refresh() {
+    // synchronize data on refresh page
+    loadShows();
+    loadProductions();
+  }
+
   void _navigateToLogin() {
     if (mounted) {
       Navigator.pushReplacement(
