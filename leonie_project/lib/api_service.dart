@@ -2,87 +2,27 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<List<dynamic>?> fetchShows() async {
+Future callApiGet(String request) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  // Récupérer la valeur du cookie stocké
-  String? cookie = prefs.getString('almond_cookie');
-  if (cookie == null) {
-    return null;
-  }
-
-  final url = Uri.parse('https://tta.alwaysdata.net/shows');
-
-  final response = await http.get(
-    url,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookie, // Utilisation du cookie récupéré
-    },
-  );
-
-  if (response.statusCode == 200) {
-    // Décoder la réponse JSON et renvoyer la liste des shows
-    List<dynamic> shows = json.decode(response.body);
-    return shows;
-  } else {
-    return null;
-  }
-}
-
-Future<Map?> getInfoShow(idShow) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  // Récupérer la valeur du cookie stocké
+  // Retrieves the value of the stored cookie.
   String? cookie = prefs.getString('almond_cookie');
 
   if (cookie == null) {
     return null;
   }
 
-  final url = Uri.parse('https://tta.alwaysdata.net/shows/$idShow/details');
+  final url = Uri.parse('https://tta.alwaysdata.net/$request');
 
   final response = await http.get(
     url,
     headers: {
       'Content-Type': 'application/json',
-      'Cookie': cookie, // Utilisation du cookie récupéré
+      'Cookie': cookie,
     },
   );
-
   if (response.statusCode == 200) {
-    // Décoder la réponse JSON et renvoyer la liste des shows
-    Map show = json.decode(response.body);
-    return show;
-  } else {
-    return null;
-  }
-}
-
-Future<List?> getInfoProductions(idShow) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  // Récupérer la valeur du cookie stocké
-  String? cookie = prefs.getString('almond_cookie');
-
-  if (cookie == null) {
-    return null;
-  }
-
-  final url = Uri.parse('https://tta.alwaysdata.net/shows/$idShow/productions');
-
-  final response = await http.get(
-    url,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookie, // Utilisation du cookie récupéré
-    },
-  );
-
-  if (response.statusCode == 200) {
-    // Décoder la réponse JSON et renvoyer la liste des shows
-    List productions = json.decode(response.body);
-    return productions;
+    return json.decode(response.body);
   } else {
     return null;
   }
@@ -91,7 +31,7 @@ Future<List?> getInfoProductions(idShow) async {
 Future<void> likeShow(int idShow) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  // Récupérer la valeur du cookie stocké
+  // Retrieves the value of the stored cookie.
   String? cookie = prefs.getString('almond_cookie');
   if (cookie == null) {
     return;
@@ -103,7 +43,7 @@ Future<void> likeShow(int idShow) async {
     url,
     headers: {
       'Content-Type': 'application/json',
-      'Cookie': cookie, // Utilisation du cookie récupéré
+      'Cookie': cookie,
     },
     body: json.encode({
       'action': 'yes',
@@ -114,7 +54,7 @@ Future<void> likeShow(int idShow) async {
 Future<void> unlikeShow(int idShow) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  // Récupérer la valeur du cookie stocké
+  // Retrieves the value of the stored cookie.
   String? cookie = prefs.getString('almond_cookie');
   if (cookie == null) {
     return;
@@ -126,10 +66,102 @@ Future<void> unlikeShow(int idShow) async {
     url,
     headers: {
       'Content-Type': 'application/json',
-      'Cookie': cookie, // Utilisation du cookie récupéré
+      'Cookie': cookie,
     },
     body: json.encode({
       'action': 'no',
     }),
+  );
+}
+
+Future<void> likeProduction(int idProduction) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Retrieves the value of the stored cookie.
+  String? cookie = prefs.getString('almond_cookie');
+  if (cookie == null) {
+    return;
+  }
+
+  final url =
+      Uri.parse('https://tta.alwaysdata.net/productions/$idProduction/like');
+
+  await http.put(
+    url,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cookie': cookie,
+    },
+    body: json.encode({
+      'action': 'yes',
+    }),
+  );
+}
+
+Future<void> unlikeProduction(int idProduction) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Retrieves the value of the stored cookie.
+  String? cookie = prefs.getString('almond_cookie');
+  if (cookie == null) {
+    return;
+  }
+
+  final url =
+      Uri.parse('https://tta.alwaysdata.net/productions/$idProduction/like');
+
+  await http.put(
+    url,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cookie': cookie,
+    },
+    body: json.encode({
+      'action': 'no',
+    }),
+  );
+}
+
+Future<void> seeProduction(int idProduction, int idProgramming) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Retrieves the value of the stored cookie.
+  String? cookie = prefs.getString('almond_cookie');
+  if (cookie == null) {
+    return;
+  }
+
+  final url = Uri.parse('https://tta.alwaysdata.net/seen/create');
+
+  await http.post(
+    url,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cookie': cookie,
+    },
+    body: json.encode({
+      'id_production': idProduction,
+      'id_programming': idProgramming,
+    }),
+  );
+}
+
+Future<void> unseeProduction(int idSeen) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Retrieves the value of the stored cookie.
+  String? cookie = prefs.getString('almond_cookie');
+  if (cookie == null) {
+    return;
+  }
+
+  final url = Uri.parse('https://tta.alwaysdata.net/seen/$idSeen');
+
+  await http.delete(
+    url,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cookie': cookie,
+    },
   );
 }

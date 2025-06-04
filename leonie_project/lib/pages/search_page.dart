@@ -14,8 +14,8 @@ class SearchPage extends ConsumerStatefulWidget {
 
 class SearchPageState extends ConsumerState<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-  List<dynamic> availableShows = []; // Liste de tous les shows
-  List<dynamic> _filteredShows = []; // Liste filtrée pour la recherche
+  List<dynamic> availableShows = [];
+  List<dynamic> _filteredShows = [];
   bool _isLoading = true;
   bool _hasError = false;
 
@@ -25,45 +25,36 @@ class SearchPageState extends ConsumerState<SearchPage> {
     _fetchAndSetShows();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   // Vérifiez si availableShows est vide et recharger les données si nécessaire
-  //   _fetchAndSetShows();
-  // }
-
   Future<void> _fetchAndSetShows() async {
     setState(() {
-      _isLoading = true; // Démarrez le chargement
-      _hasError = false; // Réinitialisez l'état d'erreur
+      _isLoading = true;
+      _hasError = false;
     });
 
     try {
-      List<dynamic>? fetchedShows = await fetchShows();
-      if (fetchedShows != null) {
+      final response = await callApiGet("shows");
+      if (response != null) {
         setState(() {
-          availableShows =
-              fetchedShows; // Mettez à jour la liste des shows disponibles
-          _filteredShows = availableShows; // Mettez à jour la liste filtrée
-          _isLoading = false; // Fin du chargement
+          availableShows = response;
+          _filteredShows = availableShows;
+          _isLoading = false;
         });
       } else {
         setState(() {
           _isLoading = false;
-          _hasError =
-              true; // Indiquez une erreur si aucun show n'a été récupéré
+          _hasError = true;
         });
       }
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _hasError = true; // Indiquez une erreur en cas d'exception
+        _hasError = true;
       });
     }
   }
 
-  // Filtrer les shows en fonction de la recherche
-  void _filterData(String query) {
+  // Filter shows according to search.
+  void _filterShows(String query) {
     final normalizedQuery = removeDiacritics(query.toLowerCase());
     setState(() {
       _filteredShows = availableShows.where((show) {
@@ -73,7 +64,6 @@ class SearchPageState extends ConsumerState<SearchPage> {
     });
   }
 
-  // Sélectionner un show
   void selectShow(BuildContext context, Map show) {
     FocusScope.of(context).unfocus();
     Navigator.push(
@@ -86,7 +76,6 @@ class SearchPageState extends ConsumerState<SearchPage> {
     );
   }
 
-  // Réinitialiser la recherche
   void resetSearch() {
     setState(() {
       _searchController.clear();
@@ -99,7 +88,7 @@ class SearchPageState extends ConsumerState<SearchPage> {
     return Scaffold(
       body: Column(
         children: [
-          // Search bar
+          // Search bar.
           Container(
             decoration: BoxDecoration(
               boxShadow: [
@@ -130,7 +119,7 @@ class SearchPageState extends ConsumerState<SearchPage> {
                 ),
                 child: TextField(
                   controller: _searchController,
-                  onChanged: _filterData, // Filtrer lors de la saisie
+                  onChanged: _filterShows, // Filtrer lors de la saisie
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search, color: Colors.grey),
                     hintText: 'Search...',
@@ -143,7 +132,7 @@ class SearchPageState extends ConsumerState<SearchPage> {
               ),
             ),
           ),
-          // Results
+          // Results.
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
@@ -164,7 +153,7 @@ class SearchPageState extends ConsumerState<SearchPage> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: Row(
                                     children: [
-                                      // Image of the show
+                                      // Image of the show.
                                       Container(
                                         width: 80,
                                         height: 80,
@@ -180,7 +169,7 @@ class SearchPageState extends ConsumerState<SearchPage> {
                                         ),
                                       ),
                                       const SizedBox(width: 10),
-                                      // Show title
+                                      // Show title.
                                       Expanded(
                                         child: Text(
                                           show['title_show'],

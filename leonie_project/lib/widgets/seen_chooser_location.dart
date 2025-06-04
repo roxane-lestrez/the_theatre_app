@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+
+// This widget creates a location chooser.
+
+class SeenChooserLocation extends StatelessWidget {
+  const SeenChooserLocation({
+    super.key,
+    required this.location,
+    required this.idsSeen,
+  });
+
+  final Map location;
+  final List idsSeen;
+
+  // String formatDate(String isoDate) {
+  //   final DateTime parsedDate =
+  //       DateTime.parse(isoDate); // Convertir en DateTime
+  //   final String formattedDate =
+  //       '${parsedDate.day.toString().padLeft(2, '0')}/${parsedDate.month.toString().padLeft(2, '0')}/${parsedDate.year}';
+  //   return formattedDate;
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Which one do you want to delete?"),
+      content: SingleChildScrollView(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          ...idsSeen.map((idSeen) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(
+                      context, [idSeen]); // Return the choosen location id.
+                },
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 242, 241, 241),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          location['name_location'],
+                          style: const TextStyle(fontSize: 16),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+          InkWell(
+            onTap: () {
+              Navigator.pop(context,
+                  location['ids_seen']); // Return the choosen location id.
+            },
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 225, 225),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Delete all",
+                      style: TextStyle(fontSize: 16),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ]),
+      ),
+    );
+  }
+}

@@ -1,17 +1,21 @@
-import 'package:first_app/pages/show_grid_page.dart';
+import 'package:first_app/api_service.dart';
+import 'package:first_app/pages/production_page.dart';
+import 'package:first_app/pages/grid_page.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/pages/show_page.dart';
 
 // This widget creates a horizontally scrollable list with a button to open the list in a larger format on another page.
 
-class ShowListSection extends StatelessWidget {
+class ListSection extends StatelessWidget {
   final String title;
-  final List<dynamic> shows;
+  final List<dynamic> elements;
+  final String type;
 
-  const ShowListSection({
+  const ListSection({
     super.key,
     required this.title,
-    required this.shows,
+    required this.elements,
+    required this.type,
   });
 
   void navigateToShowPage(BuildContext context, Map show) {
@@ -23,13 +27,29 @@ class ShowListSection extends StatelessWidget {
     );
   }
 
-  void navigateToShowGrid(BuildContext context) {
+  void navigateToProductionPage(BuildContext context, production) async {
+    final response = await callApiGet("shows/${production['id_show']}/details");
+    final titleShow =
+        response != null ? response['title_show'] : 'Show name not found';
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ShowGridPage(
+        builder: (context) => ProductionPage(
+          idProduction: production['id_production'],
+          showTitle: titleShow,
+        ),
+      ),
+    );
+  }
+
+  void navigateToGrid(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GridPage(
           title: title,
-          shows: shows,
+          element: elements,
+          type: type,
         ),
       ),
     );
@@ -48,14 +68,14 @@ class ShowListSection extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 30,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               // Button to open the list in a larger format on another page.
               IconButton(
                 icon: const Icon(Icons.open_in_new),
-                onPressed: () => navigateToShowGrid(context),
+                onPressed: () => navigateToGrid(context),
               ),
             ],
           ),
@@ -63,7 +83,7 @@ class ShowListSection extends StatelessWidget {
           // Scrollable list of shows.
           SizedBox(
             height: 210,
-            child: shows.isEmpty
+            child: elements.isEmpty
                 ? const Center(
                     child: Text(
                       'This list is empty.',
@@ -76,11 +96,13 @@ class ShowListSection extends StatelessWidget {
                   )
                 : ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: shows.length,
+                    itemCount: elements.length,
                     itemBuilder: (context, index) {
-                      final show = shows[shows.length - index - 1];
+                      final element = elements[index];
                       return GestureDetector(
-                        onTap: () => navigateToShowPage(context, show),
+                        onTap: () => element.containsKey('title_show')
+                            ? navigateToShowPage(context, element)
+                            : navigateToProductionPage(context, element),
                         child: Container(
                           width: 120,
                           margin: const EdgeInsets.only(right: 8),
@@ -95,7 +117,7 @@ class ShowListSection extends StatelessWidget {
                                   color: Colors
                                       .grey, // Fallback color if image fails to load
                                   image: DecorationImage(
-                                    image: NetworkImage(show['url_poster'] ??
+                                    image: NetworkImage(element['url_poster'] ??
                                         'https://static.wikia.nocookie.net/the-theatre/images/5/58/Noposter.jpeg/revision/latest?cb=20240818094701'), // Chargez l'image depuis l'URL
                                     fit: BoxFit.cover,
                                   ),
@@ -105,7 +127,9 @@ class ShowListSection extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  show['title_show'],
+                                  element.containsKey('title_show')
+                                      ? element['title_show']
+                                      : element['name_production'],
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
