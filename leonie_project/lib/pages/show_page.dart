@@ -89,7 +89,7 @@ class ShowPageState extends ConsumerState<ShowPage> {
       MaterialPageRoute(
         builder: (context) => ProductionPage(
           idProduction: production['id_production'],
-          showTitle: show['title_show'],
+          show: show,
         ),
       ),
     );

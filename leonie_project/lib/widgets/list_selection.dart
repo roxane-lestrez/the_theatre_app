@@ -28,15 +28,13 @@ class ListSection extends StatelessWidget {
   }
 
   void navigateToProductionPage(BuildContext context, production) async {
-    final response = await callApiGet("shows/${production['id_show']}/details");
-    final titleShow =
-        response != null ? response['title_show'] : 'Show name not found';
+    final show = await callApiGet("shows/${production['id_show']}/details");
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ProductionPage(
           idProduction: production['id_production'],
-          showTitle: titleShow,
+          show: show,
         ),
       ),
     );
