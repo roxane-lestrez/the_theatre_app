@@ -1,4 +1,5 @@
 import 'package:first_app/api_service.dart';
+import 'package:first_app/pages/show_page.dart';
 import 'package:first_app/widgets/action_choosing_tap_check_location.dart';
 import 'package:first_app/widgets/add_to_list_button.dart';
 import 'package:first_app/widgets/location_chooser.dart';
@@ -12,11 +13,11 @@ class ProductionPage extends StatefulWidget {
   const ProductionPage({
     super.key,
     required this.idProduction,
-    required this.showTitle,
+    required this.show,
   });
 
   final int idProduction;
-  final String showTitle;
+  final Map show;
 
   @override
   ProductionPageState createState() => ProductionPageState();
@@ -148,13 +149,22 @@ class ProductionPageState extends State<ProductionPage> {
     loadProduction();
   }
 
+  void navigateToShowPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ShowPage(idShow: production['id_show']),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
-          widget.showTitle,
+          widget.show['title_show'],
           style: const TextStyle(fontSize: 20),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -178,11 +188,14 @@ class ProductionPageState extends State<ProductionPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(widget.showTitle,
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey)),
+                              InkWell(
+                                onTap: navigateToShowPage,
+                                child: Text(widget.show['title_show'],
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey)),
+                              ),
                               const SizedBox(height: 16),
                               Text(production['name_production'],
                                   style: const TextStyle(
