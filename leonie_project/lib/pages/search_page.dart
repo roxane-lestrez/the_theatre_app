@@ -94,8 +94,12 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
 
   @override
   void didPopNext() {
-    // Cette méthode est appelée quand on revient sur cette page
+    // This method is called when we come back to this page
     _fetchAndSetShows();
+  }
+
+  void refresh() {
+    _fetchAndSetShows(); // synchronize data on refresh page
   }
 
   // Filter shows according to search.
