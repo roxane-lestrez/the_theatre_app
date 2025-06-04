@@ -100,6 +100,7 @@ class LocationsContainerState extends State<LocationsContainer> {
                       ],
                     ),
                   ),
+                  location["ids_seen"].length > 1 ? Text("x${location["ids_seen"].length}") : Text(""),
                   IconButton(
                     icon: Icon(
                       Icons.check_circle,
