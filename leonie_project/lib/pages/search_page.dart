@@ -54,6 +54,28 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
       });
     }
   }
+
+  Future<void> _refreshLikedStatus() async {
+    try {
+      final updatedShows = await callApiGet("shows");
+      if (updatedShows != null) {
+        final updatedLikedMap = {
+          for (var show in updatedShows) show['id_show']: show['liked']
+        };
+
+        setState(() {
+          for (var show in availableShows) {
+            final updatedLiked = updatedLikedMap[show['id_show']];
+            if (updatedLiked != null) {
+              show['liked'] = updatedLiked;
+            }
+          }
+        });
+      }
+    } catch (e) {
+      print("Erreur lors de la mise à jour des likes: $e");
+    }
+  }
   
   Future<void> tapHeart(BuildContext context, Map show) async {
     try {
@@ -94,12 +116,13 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
 
   @override
   void didPopNext() {
-    // This method is called when we come back to this page
-    _fetchAndSetShows();
+    // This method is called when we come back to this page (synchronize likes)
+    _refreshLikedStatus();
   }
 
   void refresh() {
-    _fetchAndSetShows(); // synchronize data on refresh page
+    _fetchAndSetShows(); // synchronize all data on refresh page
+    _searchController.clear(); // Clear search bar
   }
 
   // Filter shows according to search.
@@ -123,13 +146,6 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
         ),
       ),
     );
-  }
-
-  void resetSearch() {
-    setState(() {
-      _searchController.clear();
-      _filteredShows = availableShows; // Réinitialisez la liste filtrée
-    });
   }
 
   @override
