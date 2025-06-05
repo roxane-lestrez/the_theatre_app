@@ -123,7 +123,7 @@ class ListSection extends StatelessWidget {
                               ),
                               // Show title below the image.
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(7.0),
                                 child: Text(
                                   element.containsKey('title_show')
                                       ? element['title_show']
