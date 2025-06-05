@@ -16,12 +16,19 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
   final List<int> _navigationStack = [0];
 
-  final GlobalKey<SearchPageState> searchPageKey = GlobalKey<SearchPageState>();
+  final GlobalKey<SearchPageState> _searchPageKey = GlobalKey<SearchPageState>();
+  final GlobalKey<AccountPageState> _accountKey = GlobalKey<AccountPageState>();
 
-  final List<Widget> _pages = [
-    const AccountPage(),
-    const SearchPage(),
-  ];
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      AccountPage(key: _accountKey),
+      SearchPage(key: _searchPageKey),
+    ];
+  }
 
   void _onTabTapped(int index) {
     if (index != _selectedPageIndex) {
@@ -29,6 +36,13 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         _selectedPageIndex = index;
         _navigationStack.add(index);
       });
+
+      // Call a refreshing method for both pages to refresh data
+      if (index == 0) {
+        _accountKey.currentState?.refresh();
+      } else if (index == 1) {
+       _searchPageKey.currentState?.refresh();
+      }
     }
   }
 

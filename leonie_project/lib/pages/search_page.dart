@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:diacritic/diacritic.dart';
 
+import '../main.dart';
+import '../widgets/add_to_list_button.dart';
 import 'show_page.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
@@ -12,7 +14,7 @@ class SearchPage extends ConsumerStatefulWidget {
   ConsumerState<SearchPage> createState() => SearchPageState();
 }
 
-class SearchPageState extends ConsumerState<SearchPage> {
+class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
   final TextEditingController _searchController = TextEditingController();
   List<dynamic> availableShows = [];
   List<dynamic> _filteredShows = [];
@@ -53,6 +55,76 @@ class SearchPageState extends ConsumerState<SearchPage> {
     }
   }
 
+  Future<void> _refreshLikedStatus() async {
+    try {
+      final updatedShows = await callApiGet("shows");
+      if (updatedShows != null) {
+        final updatedLikedMap = {
+          for (var show in updatedShows) show['id_show']: show['liked']
+        };
+
+        setState(() {
+          for (var show in availableShows) {
+            final updatedLiked = updatedLikedMap[show['id_show']];
+            if (updatedLiked != null) {
+              show['liked'] = updatedLiked;
+            }
+          }
+        });
+      }
+    } catch (e) {
+      print("Erreur lors de la mise à jour des likes: $e");
+    }
+  }
+  
+  Future<void> tapHeart(BuildContext context, Map show) async {
+    try {
+      final liked = show['liked'];
+      if (!liked) {
+        await likeShow(show['id_show']);
+      } else {
+        await unlikeShow(show['id_show']);
+      }
+
+      // Met à jour l'élément dans la liste
+      setState(() {
+        show['liked'] = !liked;
+      });
+
+    } catch (e) {
+      // Gère les erreurs ici si besoin
+      print('Erreur pendant le like/unlike: $e');
+    }
+  }
+
+  // With this method, when the list of shows to be displayed on this page changes, the page is updated.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final ModalRoute? modalRoute = ModalRoute.of(context);
+    if (modalRoute is PageRoute) {
+      routeObserver.subscribe(this, modalRoute);
+    }
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // This method is called when we come back to this page (synchronize likes)
+    _refreshLikedStatus();
+  }
+
+  void refresh() {
+    _fetchAndSetShows(); // synchronize all data on refresh page
+    _searchController.clear(); // Clear search bar
+  }
+
   // Filter shows according to search.
   void _filterShows(String query) {
     final normalizedQuery = removeDiacritics(query.toLowerCase());
@@ -74,13 +146,6 @@ class SearchPageState extends ConsumerState<SearchPage> {
         ),
       ),
     );
-  }
-
-  void resetSearch() {
-    setState(() {
-      _searchController.clear();
-      _filteredShows = availableShows; // Réinitialisez la liste filtrée
-    });
   }
 
   @override
@@ -181,6 +246,16 @@ class SearchPageState extends ConsumerState<SearchPage> {
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
+                                      // Like button.
+                                      AddToListButton(
+                                          text: "",
+                                          iconButton: Icon(
+                                            show['liked']
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: const Color.fromARGB(255, 231, 81, 141),
+                                          ),
+                                          actionFunction: () => tapHeart(context, show)),
                                     ],
                                   ),
                                 ),
