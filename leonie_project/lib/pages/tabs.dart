@@ -3,6 +3,8 @@ import 'package:first_app/pages/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../api_service.dart';
+
 // This is the main screen, used to switch between the different pages (currently the account page and the search page).
 
 class TabsScreen extends ConsumerStatefulWidget {
@@ -15,6 +17,7 @@ class TabsScreen extends ConsumerStatefulWidget {
 class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
   final List<int> _navigationStack = [0];
+  Map profile = {};
 
   final GlobalKey<SearchPageState> _searchPageKey = GlobalKey<SearchPageState>();
   final GlobalKey<AccountPageState> _accountKey = GlobalKey<AccountPageState>();
@@ -28,6 +31,12 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       AccountPage(key: _accountKey),
       SearchPage(key: _searchPageKey),
     ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProfile();
   }
 
   void _onTabTapped(int index) {
@@ -57,6 +66,29 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     return true; // Closes the application if you're already on the first page.
   }
 
+  Future<void> getProfile() async {
+    final response = await callApiGet("profile");
+    if (response != null) {
+      setState(() {
+        profile = response[0];
+      });
+    }
+  }
+
+  Widget searchPageIcon() {
+    if (profile['url_avatar'] != null && profile['url_avatar'].isNotEmpty)
+    {
+      return CircleAvatar(
+        radius: 17,
+        backgroundImage: NetworkImage(profile['url_avatar']),
+      );
+    }
+    else
+    {
+      return Icon(Icons.person);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -76,9 +108,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         bottomNavigationBar: BottomNavigationBar(
           onTap: _onTabTapped,
           currentIndex: _selectedPageIndex,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
+              icon: searchPageIcon(),
               label: 'Account',
             ),
             BottomNavigationBarItem(
