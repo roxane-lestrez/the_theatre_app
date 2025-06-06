@@ -165,3 +165,27 @@ Future<void> unseeProduction(int idSeen) async {
     },
   );
 }
+
+// Future<void> uploadProfilePicture(File image) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+
+//   // Retrieves the value of the stored cookie.
+//   String? cookie = prefs.getString('almond_cookie');
+//   if (cookie == null) {
+//     return;
+//   }
+
+//   final url =
+//       Uri.parse('https://tta.alwaysdata.net/profile/url_avatar');
+
+//   await http.put(
+//     url,
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Cookie': cookie,
+//     },
+//     body: json.encode({
+//       'action': 'yes',
+//     }),
+//   );
+// }
