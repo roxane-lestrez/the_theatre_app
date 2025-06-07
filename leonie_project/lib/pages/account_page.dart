@@ -133,6 +133,51 @@ class AccountPageState extends ConsumerState<AccountPage> with RouteAware {
     loadProductions();
   }
 
+  Widget userStatistics() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Display the number of shows liked, next to a heart icon
+        Text(
+          "${favoriteShows.length}",
+          style: const TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: 5),
+        const Icon(
+          Icons.favorite,
+          color: Color.fromARGB(255, 231, 81, 141),
+        ),
+
+        // Add vertical divider between different statistics
+        const SizedBox(
+          height: 40,
+          child: VerticalDivider(
+            color: Colors.grey,
+            thickness: 1,
+            width: 40,
+          ),
+        ),
+
+        // Display the number of productions seen, next to a tick icon
+        Text(
+          "${seenProductions.length}",
+          style: const TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: 5),
+        const Icon(
+          Icons.check_circle,
+          color:Colors.green,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,6 +202,8 @@ class AccountPageState extends ConsumerState<AccountPage> with RouteAware {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        const SizedBox(height: 10),
+                        profile.isNotEmpty ? userStatistics() : SizedBox(height: 1,),
                       ],
                     ),
                   ),
