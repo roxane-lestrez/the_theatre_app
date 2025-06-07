@@ -86,85 +86,95 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Save the height of the device's screen
+    final maxHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(
+          title: const Text('Login'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Display error message if any.
-              if (_errorMessage.isNotEmpty)
-                Text(
-                  _errorMessage,
-                  style: const TextStyle(color: Colors.red),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Display error message if any.
+                if (_errorMessage.isNotEmpty)
+                  Text(
+                    _errorMessage,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+          
+                SizedBox(height: maxHeight / 10),
+          
+                Image.asset("assets/logo_theatre_app_extended.png"),
+          
+                SizedBox(height: maxHeight / 7),
+          
+                // Field for e-mail address.
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'E-mail address',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your e-mail address';
+                    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
+                      return 'Enter a valid e-mail address';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _email = value!;
+                  },
                 ),
-
-              const SizedBox(height: 16.0),
-
-              // Field for e-mail address.
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'E-mail address',
-                  border: OutlineInputBorder(),
+          
+                const SizedBox(height: 16.0),
+          
+                // Field for password.
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                  ),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _password = value!;
+                  },
                 ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your e-mail address';
-                  } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                      .hasMatch(value)) {
-                    return 'Enter a valid e-mail address';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _email = value!;
-                },
-              ),
-
-              const SizedBox(height: 16.0),
-
-              // Field for password.
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
+          
+                const SizedBox(height: 24.0),
+          
+                // Button to validate the form.
+                ElevatedButton(
+                  onPressed: _submitLogin,
+                  child: const Text('Confirm'),
                 ),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _password = value!;
-                },
-              ),
-
-              const SizedBox(height: 24.0),
-
-              // Button to validate the form.
-              ElevatedButton(
-                onPressed: _submitLogin,
-                child: const Text('Confirm'),
-              ),
-
-              // Button to create an account.
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RegisterPage()),
-                  );
-                },
-                child: const Text('Create new account'),
-              ),
-            ],
+          
+                // Button to create an account.
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterPage()),
+                    );
+                  },
+                  child: const Text('Create new account'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
