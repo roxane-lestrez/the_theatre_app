@@ -43,7 +43,7 @@ class LocationsContainerState extends State<LocationsContainer> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -57,7 +57,7 @@ class LocationsContainerState extends State<LocationsContainer> {
               padding: const EdgeInsets.all(8.0),
               margin: const EdgeInsets.only(bottom: 8),
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 246, 246, 246),
+                color: Theme.of(context).colorScheme.onPrimary,
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
@@ -76,7 +76,7 @@ class LocationsContainerState extends State<LocationsContainer> {
                       children: [
                         Text(
                           location['name_location'],
-                          style: const TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimaryContainer),
                         ),
                         location['first_date'] != null &&
                                 location['last_date'] != null

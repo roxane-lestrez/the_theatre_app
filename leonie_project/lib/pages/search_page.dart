@@ -99,14 +99,14 @@ class SearchPageState extends ConsumerState<SearchPage> {
                   offset: const Offset(0, 2),
                 ),
               ],
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.primary,
             ),
             child: Padding(
               padding: const EdgeInsets.only(
                   top: 50, left: 20, right: 20, bottom: 20),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   borderRadius: BorderRadius.circular(30.0),
                   boxShadow: [
                     BoxShadow(
