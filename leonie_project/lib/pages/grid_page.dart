@@ -120,13 +120,13 @@ class GridPageState extends State<GridPage> with RouteAware {
         title: Text(widget.title),
       ),
       body: updatedElements.isEmpty
-          ? const Center(
+          ? Center(
               child: Text(
                 'This list is empty.',
                 style: TextStyle(
                   fontSize: 16,
                   fontStyle: FontStyle.italic,
-                  color: Colors.grey,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
               ),
             )

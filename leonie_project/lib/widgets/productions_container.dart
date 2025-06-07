@@ -21,7 +21,7 @@ class ProductionsContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -51,7 +51,7 @@ class ProductionsContainer extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 246, 246, 246),
+                      color: Theme.of(context).colorScheme.onPrimary,
                       borderRadius: BorderRadius.circular(8),
                       boxShadow: [
                         BoxShadow(
@@ -63,7 +63,7 @@ class ProductionsContainer extends StatelessWidget {
                     ),
                     child: Text(
                       production['name_production'],
-                      style: const TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimaryContainer),
                     ),
                   ),
                 );
