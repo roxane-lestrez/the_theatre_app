@@ -66,6 +66,8 @@ flutter:
       - assets/s6.png
       - assets/s7.png
       - assets/s8.png
+      - assets/logo_theatre_app_extended.png
+      - assets/logo_theatre_app.jpg
 
 
   # The following line ensures that the Material Icons font is
