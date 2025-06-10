@@ -61,7 +61,7 @@ class LocationsContainerState extends State<LocationsContainer> {
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Theme.of(context).colorScheme.shadow.withAlpha(127),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),

@@ -104,7 +104,7 @@ class LoginPageState extends State<LoginPage> {
                 if (_errorMessage.isNotEmpty)
                   Text(
                     _errorMessage,
-                    style: const TextStyle(color: Colors.red),
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
           
                 SizedBox(height: maxHeight / 10),
