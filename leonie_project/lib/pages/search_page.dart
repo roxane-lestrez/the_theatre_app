@@ -158,13 +158,13 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
+                  color: Theme.of(context).colorScheme.shadow.withAlpha(127),
                   blurRadius: 2,
                   spreadRadius: 0,
                   offset: const Offset(0, 2),
                 ),
               ],
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.primaryContainer,
             ),
             child: Padding(
               padding: const EdgeInsets.only(
@@ -175,7 +175,7 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
                   borderRadius: BorderRadius.circular(30.0),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Theme.of(context).colorScheme.shadow.withAlpha(127),
                       spreadRadius: 1,
                       blurRadius: 5,
                       offset: const Offset(0, 3),

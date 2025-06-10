@@ -38,9 +38,9 @@ class App extends StatelessWidget {
         ),
       ),
       // Add a dark mode theme
-      // darkTheme: ThemeData.dark().copyWith(
-      //   colorScheme: kDarkColorScheme,
-      // ),
+      darkTheme: ThemeData.dark().copyWith(
+        colorScheme: kDarkColorScheme,
+      ),
       home: SplashScreen(),
       navigatorObservers: [routeObserver],
     );

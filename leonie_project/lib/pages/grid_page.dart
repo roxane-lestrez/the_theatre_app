@@ -152,7 +152,7 @@ class GridPageState extends State<GridPage> with RouteAware {
                         bottomRight: Radius.circular(10),
                       ),
                       child: GridTileBar(
-                        backgroundColor: const Color.fromARGB(133, 0, 0, 0),
+                        backgroundColor: Theme.of(context).colorScheme.shadow.withAlpha(127),
                         title: Text(
                           widget.type == 'show'
                               ? element['title_show']
