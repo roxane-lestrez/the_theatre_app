@@ -153,7 +153,7 @@ class ShowPageState extends ConsumerState<ShowPage> {
                         AddToListButton(
                             text: "Add to Wishlist",
                             iconButton: Icon(
-                              show['liked']
+                              show['liked'] == true
                                   ? Icons.favorite
                                   : Icons.favorite_border,
                               color: const Color.fromARGB(255, 231, 81, 141),

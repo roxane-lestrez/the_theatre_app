@@ -250,7 +250,7 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
                                       AddToListButton(
                                           text: "",
                                           iconButton: Icon(
-                                            show['liked']
+                                            show['liked'] == true
                                                 ? Icons.favorite
                                                 : Icons.favorite_border,
                                             color: const Color.fromARGB(255, 231, 81, 141),
