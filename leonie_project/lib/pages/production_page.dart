@@ -206,7 +206,7 @@ class ProductionPageState extends State<ProductionPage> {
                                   text: "Add to Wishlist",
                                   iconButton: Icon(
                                     Icons.favorite,
-                                    color: production['liked']
+                                    color: production['liked'] == true
                                         ? const Color.fromARGB(
                                             255, 231, 81, 141)
                                         : const Color.fromARGB(
@@ -217,7 +217,7 @@ class ProductionPageState extends State<ProductionPage> {
                                   text: "Add to Seen list",
                                   iconButton: Icon(
                                     Icons.check_circle,
-                                    color: production['seen']
+                                    color: production['seen'] == true
                                         ? Colors.green
                                         : const Color.fromARGB(
                                             255, 214, 214, 214),
