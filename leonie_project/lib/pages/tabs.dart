@@ -19,7 +19,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   final List<int> _navigationStack = [0];
   Map profile = {};
 
-  final GlobalKey<SearchPageState> _searchPageKey = GlobalKey<SearchPageState>();
+  final GlobalKey<SearchPageState> _searchPageKey =
+      GlobalKey<SearchPageState>();
   final GlobalKey<AccountPageState> _accountKey = GlobalKey<AccountPageState>();
 
   late final List<Widget> _pages;
@@ -31,11 +32,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       AccountPage(key: _accountKey),
       SearchPage(key: _searchPageKey),
     ];
-  }
-
-  @override
-  void initState() {
-    super.initState();
     getProfile();
   }
 
@@ -50,7 +46,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       if (index == 0) {
         _accountKey.currentState?.refresh();
       } else if (index == 1) {
-       _searchPageKey.currentState?.refresh();
+        _searchPageKey.currentState?.refresh();
       }
     }
   }
@@ -76,15 +72,12 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   }
 
   Widget searchPageIcon() {
-    if (profile['url_avatar'] != null && profile['url_avatar'].isNotEmpty)
-    {
+    if (profile['url_avatar'] != null && profile['url_avatar'].isNotEmpty) {
       return CircleAvatar(
         radius: 17,
         backgroundImage: NetworkImage(profile['url_avatar']),
       );
-    }
-    else
-    {
+    } else {
       return Icon(Icons.person);
     }
   }
