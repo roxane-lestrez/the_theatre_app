@@ -1,12 +1,13 @@
 import 'package:first_app/api_service.dart';
 import 'package:first_app/pages/show_page.dart';
-import 'package:first_app/widgets/action_choosing_tap_check_location.dart';
+import 'package:first_app/utils.dart';
+import 'package:first_app/widgets/action_choosing_tap_check.dart';
 import 'package:first_app/widgets/add_to_list_button.dart';
-import 'package:first_app/widgets/location_chooser.dart';
+// import 'package:first_app/widgets/location_chooser.dart';
 import 'package:first_app/widgets/locations_container.dart';
 import 'package:first_app/widgets/poster_production.dart';
 import 'package:first_app/widgets/seen_chooser_location.dart';
-import 'package:first_app/widgets/seen_chooser_production.dart';
+// import 'package:first_app/widgets/seen_chooser_production.dart';
 import 'package:flutter/material.dart';
 
 class ProductionPage extends StatefulWidget {
@@ -68,70 +69,32 @@ class ProductionPageState extends State<ProductionPage> {
     await loadProduction();
   }
 
-  Future _dialog(action) async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return action;
-      },
-    );
-  }
-
   Future<void> tapCheck() async {
-    if (production['seen'] == true) {
-      final selectedAction =
-          await _dialog(const ActionChoosingTapCheckLocation());
-      if (selectedAction == "see again") {
-        final selectedLocation =
-            await _dialog(LocationChooser(locations: locations));
-        if (selectedLocation != null) {
-          await seeProduction(
-              production['id_production'], selectedLocation['id_programming']);
-        }
-      }
-      if (selectedAction == "unsee") {
-        if (production['ids_seen'].length == 1) {
-          await unseeProduction(production['ids_seen'][0]);
-        } else {
-          final selectedIds = await _dialog(SeenChooserProduction(
-            production: production,
-          ));
-          if (selectedIds.length == 1) {
-            await unseeProduction(selectedIds[0]);
-          } else {
-            for (var idSeen in selectedIds) {
-              await unseeProduction(idSeen);
-            }
-          }
-        }
-      }
-    } else {
-      final selectedLocation =
-          await _dialog(LocationChooser(locations: locations));
-
-      if (selectedLocation != null) {
-        await seeProduction(
-            production['id_production'], selectedLocation['id_programming']);
-      }
-    }
+    await tapCheckProduction(
+      context: context,
+      production: production,
+      locations: locations,
+    );
     loadProduction();
   }
 
-  Future<void> tapCheckLocation(location) async {
+  Future<void> tapCheckLocation(Map location) async {
     if (location['seen'] == false) {
       await seeProduction(
           production['id_production'], location['id_programming']);
     } else {
       final selectedAction =
-          await _dialog(const ActionChoosingTapCheckLocation());
+          await dialog(context, const ActionChoosingTapCheck());
       if (selectedAction == 'unsee') {
         if (location['ids_seen'].length == 1) {
           await unseeProduction(location['ids_seen'][0]);
         } else {
-          final selectedSeen = await _dialog(SeenChooserLocation(
-            location: location,
-            idsSeen: location['ids_seen'],
-          ));
+          final selectedSeen = await dialog(
+              context,
+              SeenChooserLocation(
+                location: location,
+                idsSeen: location['ids_seen'],
+              ));
           if (selectedSeen.length == 1) {
             await unseeProduction(selectedSeen[0]);
           } else {

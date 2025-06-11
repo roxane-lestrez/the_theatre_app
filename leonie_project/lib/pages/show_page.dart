@@ -1,7 +1,9 @@
 import 'package:first_app/api_service.dart';
 import 'package:first_app/pages/production_page.dart';
+import 'package:first_app/utils.dart';
 import 'package:first_app/widgets/add_to_list_button.dart';
 import 'package:first_app/widgets/poster_show.dart';
+import 'package:first_app/widgets/production_chooser.dart';
 import 'package:first_app/widgets/productions_container.dart';
 import 'package:first_app/widgets/synopsis.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +85,28 @@ class ShowPageState extends ConsumerState<ShowPage> {
     loadShow();
   }
 
+  Future<void> tapCheckProd(BuildContext context) async {
+    final selectedProduction =
+        await dialog(context, ProductionChooser(productions: productions));
+
+    final production = await callApiGet(
+        'productions/${selectedProduction['id_production']}/detail');
+
+    if (production == null) return;
+
+    final locations = production['locations'] ?? [];
+
+    if (!context.mounted) return;
+
+    await tapCheckProduction(
+      context: context,
+      production: production,
+      locations: locations,
+    );
+
+    loadProductions();
+  }
+
   void navigateToProductionPage(BuildContext context, production) {
     Navigator.push(
       context,
@@ -97,18 +121,6 @@ class ShowPageState extends ConsumerState<ShowPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Classify categories by group.
-    final groupedProductions = <int, List<Map<String, dynamic>>>{};
-    final correspondanceCategories = <int, String>{};
-    for (var production in productions) {
-      groupedProductions
-          .putIfAbsent(production['id_cat'], () => [])
-          .add(production);
-      correspondanceCategories.putIfAbsent(
-          production['id_cat'], () => production['title_cat']);
-    }
-    final sortedCategories = groupedProductions.keys.toList()..sort();
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -173,11 +185,10 @@ class ShowPageState extends ConsumerState<ShowPage> {
                         const SizedBox(height: 16),
                         // Content.
                         ProductionsContainer(
-                            sortedCategories: sortedCategories,
-                            groupedProductions: groupedProductions,
-                            correspondanceCategories: correspondanceCategories,
-                            navigateToProductionPageFunction:
-                                navigateToProductionPage),
+                          productions: productions,
+                          navigateToProductionPageFunction:
+                              navigateToProductionPage,
+                        ),
                       ],
                     ),
                   ),

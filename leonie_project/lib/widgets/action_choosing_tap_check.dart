@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 // This widget creates a location chooser.
 
-class ActionChoosingTapCheckLocation extends StatelessWidget {
-  const ActionChoosingTapCheckLocation({
+class ActionChoosingTapCheck extends StatelessWidget {
+  const ActionChoosingTapCheck({
     super.key,
   });
 

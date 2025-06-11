@@ -26,18 +26,6 @@ class LocationsContainerState extends State<LocationsContainer> {
     return formattedDate;
   }
 
-  // Future<void> tapCheck(location) async {
-  //   setState(() {
-  //     if (location['seen'] == false) {
-  //       seeProduction(production['id_production']);
-  //     }
-  //     } else {
-  //       unseeProduction(production['id_production']);
-  //     }
-  //   });
-  //   loadProd();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,7 +49,7 @@ class LocationsContainerState extends State<LocationsContainer> {
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: const Color.fromARGB(50, 0, 0, 0),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -76,7 +64,11 @@ class LocationsContainerState extends State<LocationsContainer> {
                       children: [
                         Text(
                           location['name_location'],
-                          style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimaryContainer),
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer),
                         ),
                         location['first_date'] != null &&
                                 location['last_date'] != null
@@ -100,7 +92,9 @@ class LocationsContainerState extends State<LocationsContainer> {
                       ],
                     ),
                   ),
-                  location["ids_seen"].length > 1 ? Text("x${location["ids_seen"].length}") : Text(""),
+                  location["ids_seen"].length > 1
+                      ? Text("x${location["ids_seen"].length}")
+                      : Text(""),
                   IconButton(
                     icon: Icon(
                       Icons.check_circle,
@@ -115,7 +109,7 @@ class LocationsContainerState extends State<LocationsContainer> {
               ),
             ),
           );
-        }).toList(),
+        }),
       ]),
     );
   }

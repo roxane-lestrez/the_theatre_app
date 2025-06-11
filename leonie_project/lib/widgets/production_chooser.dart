@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 // This widget creates a location chooser.
 
-class LocationChooser extends StatelessWidget {
-  const LocationChooser({
+class ProductionChooser extends StatelessWidget {
+  const ProductionChooser({
     super.key,
-    required this.locations,
+    required this.productions,
   });
 
-  final List locations;
+  final List productions;
 
   String formatDate(String isoDate) {
     final DateTime parsedDate =
@@ -22,16 +22,16 @@ class LocationChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Where did you see the show?"),
+      title: const Text("What production did you see?"),
       content: SingleChildScrollView(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          ...locations.map((location) {
+          ...productions.map((production) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: InkWell(
                 onTap: () {
                   Navigator.pop(
-                      context, location); // Return the choosen location id.
+                      context, production); // Return the choosen location id.
                 },
                 borderRadius: BorderRadius.circular(8),
                 child: Container(
@@ -45,7 +45,7 @@ class LocationChooser extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          location['name_location'],
+                          production['name_production'],
                           style: const TextStyle(fontSize: 16),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -53,22 +53,22 @@ class LocationChooser extends StatelessWidget {
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: location['first_date'] != null &&
-                                location['last_date'] != null
+                        child: production['first_date'] != null &&
+                                production['last_date'] != null
                             ? Text(
-                                '${formatDate(location['first_date'])} - ${formatDate(location['last_date'])}',
+                                '${formatDate(production['first_date'])} - ${formatDate(production['last_date'])}',
                                 style: AppTextStyles.dates,
                               )
-                            : location['first_date'] == null &&
-                                    location['last_date'] != null
+                            : production['first_date'] == null &&
+                                    production['last_date'] != null
                                 ? Text(
-                                    'Until ${formatDate(location['last_date'])}',
+                                    'Until ${formatDate(production['last_date'])}',
                                     style: AppTextStyles.dates,
                                   )
-                                : location['first_date'] != null &&
-                                        location['last_date'] == null
+                                : production['first_date'] != null &&
+                                        production['last_date'] == null
                                     ? Text(
-                                        'From ${formatDate(location['first_date'])}',
+                                        'From ${formatDate(production['first_date'])}',
                                         style: AppTextStyles.dates,
                                       )
                                     : const SizedBox.shrink(),

@@ -1,23 +1,54 @@
+import 'package:first_app/api_service.dart';
+import 'package:first_app/utils.dart';
 import 'package:flutter/material.dart';
 
 // This widget creates a container for the productions sorted in categories.
 
-class ProductionsContainer extends StatelessWidget {
+class ProductionsContainer extends StatefulWidget {
   const ProductionsContainer({
     super.key,
-    required this.sortedCategories,
-    required this.groupedProductions,
-    required this.correspondanceCategories,
+    required this.productions,
     required this.navigateToProductionPageFunction,
   });
 
-  final List sortedCategories;
-  final Map groupedProductions;
-  final Map correspondanceCategories;
+  final List productions;
   final Function navigateToProductionPageFunction;
 
   @override
+  State<ProductionsContainer> createState() => _ProductionsContainerState();
+}
+
+class _ProductionsContainerState extends State<ProductionsContainer> {
+  Future<void> tapCheck(BuildContext context, int idProduction) async {
+    final production = await callApiGet('productions/$idProduction/detail');
+
+    if (production == null) return;
+
+    final locations = production['locations'] ?? [];
+
+    if (!context.mounted) return;
+
+    await tapCheckProduction(
+      context: context,
+      production: production,
+      locations: locations,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Classify categories by group.
+    final groupedProductions = <int, List<Map<String, dynamic>>>{};
+    final correspondanceCategories = <int, String>{};
+    for (var production in widget.productions) {
+      groupedProductions
+          .putIfAbsent(production['id_cat'], () => [])
+          .add(production);
+      correspondanceCategories.putIfAbsent(
+          production['id_cat'], () => production['title_cat']);
+    }
+    final sortedCategories = groupedProductions.keys.toList()..sort();
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
@@ -26,7 +57,7 @@ class ProductionsContainer extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: sortedCategories.map((id_cat) {
+        children: sortedCategories.map((idCat) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -34,7 +65,7 @@ class ProductionsContainer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Text(
-                  correspondanceCategories[id_cat],
+                  correspondanceCategories[idCat]!,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -42,10 +73,11 @@ class ProductionsContainer extends StatelessWidget {
                 ),
               ),
               // List of clickable productions.
-              ...groupedProductions[id_cat]!.map((production) {
+              ...groupedProductions[idCat]!.map((production) {
                 return InkWell(
                   onTap: () {
-                    navigateToProductionPageFunction(context, production);
+                    widget.navigateToProductionPageFunction(
+                        context, production);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
@@ -55,15 +87,36 @@ class ProductionsContainer extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: const Color.fromARGB(50, 0, 0, 0),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
                       ],
                     ),
-                    child: Text(
-                      production['name_production'],
-                      style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimaryContainer),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          production['name_production'],
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.check_circle,
+                            color:
+                                false // Modifier ici en production['seen']==true
+                                    ? Colors.green
+                                    : const Color.fromARGB(255, 214, 214, 214),
+                            size: 30,
+                          ),
+                          onPressed: () =>
+                              tapCheck(context, production['id_production']),
+                        ),
+                      ],
                     ),
                   ),
                 );
