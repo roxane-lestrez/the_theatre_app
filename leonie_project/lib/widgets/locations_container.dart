@@ -1,4 +1,6 @@
 import 'package:first_app/pages/text_style.dart';
+import 'package:first_app/utils/constants.dart';
+import 'package:first_app/widgets/add_to_list_button.dart';
 import 'package:flutter/material.dart';
 
 // This widget creates a container for the locations.
@@ -101,21 +103,17 @@ class LocationsContainerState extends State<LocationsContainer> {
                     ),
                   ),
                   location["ids_seen"].length > 1 ? Text("x${location["ids_seen"].length}") : Text(""),
-                  IconButton(
-                    icon: Icon(
-                      Icons.check_circle,
-                      color: location['seen'] == true
-                          ? Colors.green
-                          : const Color.fromARGB(255, 214, 214, 214),
-                      size: 30,
-                    ),
-                    onPressed: () => widget.tapCheckLocation(location),
+                  AddToListButton(
+                    text: "",
+                    iconType: CustomIcons.seen,
+                    iconState: location['seen'] ?? false,
+                    actionFunction: () => widget.tapCheckLocation(location),
                   ),
                 ],
               ),
             ),
           );
-        }).toList(),
+        }),
       ]),
     );
   }

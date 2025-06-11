@@ -1,5 +1,6 @@
 import 'package:first_app/api_service.dart';
 import 'package:first_app/pages/production_page.dart';
+import 'package:first_app/utils/constants.dart';
 import 'package:first_app/widgets/add_to_list_button.dart';
 import 'package:first_app/widgets/poster_show.dart';
 import 'package:first_app/widgets/productions_container.dart';
@@ -152,12 +153,8 @@ class ShowPageState extends ConsumerState<ShowPage> {
                         // Wishlist button.
                         AddToListButton(
                             text: "Add to Wishlist",
-                            iconButton: Icon(
-                              show['liked'] == true
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: const Color.fromARGB(255, 231, 81, 141),
-                            ),
+                            iconType: CustomIcons.like,
+                            iconState: show['liked'] ?? false,
                             actionFunction: tapHeart),
                         const SizedBox(height: 30),
                         // Productions part.
