@@ -1,5 +1,6 @@
 import 'package:first_app/api_service.dart';
 import 'package:first_app/pages/show_page.dart';
+import 'package:first_app/utils/constants.dart';
 import 'package:first_app/widgets/action_choosing_tap_check_location.dart';
 import 'package:first_app/widgets/add_to_list_button.dart';
 import 'package:first_app/widgets/location_chooser.dart';
@@ -204,24 +205,13 @@ class ProductionPageState extends State<ProductionPage> {
                               const SizedBox(height: 16),
                               AddToListButton(
                                   text: "Add to Wishlist",
-                                  iconButton: Icon(
-                                    Icons.favorite,
-                                    color: production['liked'] == true
-                                        ? const Color.fromARGB(
-                                            255, 231, 81, 141)
-                                        : const Color.fromARGB(
-                                            255, 214, 214, 214),
-                                  ),
+                                  iconType: CustomIcons.like,
+                                  iconState: production['liked'] ?? false,
                                   actionFunction: tapHeart),
                               AddToListButton(
                                   text: "Add to Seen list",
-                                  iconButton: Icon(
-                                    Icons.check_circle,
-                                    color: production['seen'] == true
-                                        ? Colors.green
-                                        : const Color.fromARGB(
-                                            255, 214, 214, 214),
-                                  ),
+                                  iconType: CustomIcons.seen,
+                                  iconState: production['seen'] ?? false,
                                   actionFunction: tapCheck),
                               const SizedBox(height: 16),
                               // Locations part.

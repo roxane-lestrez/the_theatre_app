@@ -1,6 +1,7 @@
 import 'package:first_app/api_service.dart';
 import 'package:first_app/main.dart';
 import 'package:first_app/pages/login/login_page.dart';
+import 'package:first_app/utils/constants.dart';
 import 'package:first_app/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -146,9 +147,9 @@ class AccountPageState extends ConsumerState<AccountPage> with RouteAware {
           ),
         ),
         const SizedBox(width: 5),
-        const Icon(
+        Icon(
           Icons.favorite,
-          color: Color.fromARGB(255, 231, 81, 141),
+          color: likeIconColor,
         ),
 
         // Add vertical divider between different statistics
@@ -170,9 +171,9 @@ class AccountPageState extends ConsumerState<AccountPage> with RouteAware {
           ),
         ),
         const SizedBox(width: 5),
-        const Icon(
+        Icon(
           Icons.check_circle,
-          color:Colors.green,
+          color: seenIconColor,
         ),
       ],
     );
