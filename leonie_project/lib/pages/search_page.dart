@@ -1,4 +1,5 @@
 import 'package:first_app/api_service.dart';
+import 'package:first_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:diacritic/diacritic.dart';
@@ -158,13 +159,13 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
+                  color: Theme.of(context).colorScheme.shadow.withAlpha(127),
                   blurRadius: 2,
                   spreadRadius: 0,
                   offset: const Offset(0, 2),
                 ),
               ],
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.primaryContainer,
             ),
             child: Padding(
               padding: const EdgeInsets.only(
@@ -175,7 +176,7 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
                   borderRadius: BorderRadius.circular(30.0),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Theme.of(context).colorScheme.shadow.withAlpha(127),
                       spreadRadius: 1,
                       blurRadius: 5,
                       offset: const Offset(0, 3),
@@ -226,8 +227,7 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
                                           borderRadius:
                                               BorderRadius.circular(8),
                                           image: DecorationImage(
-                                            image: NetworkImage(show[
-                                                    'url_poster'] ??
+                                            image: NetworkImage(show['url_poster'] ??
                                                 'https://static.wikia.nocookie.net/the-theatre/images/5/58/Noposter.jpeg/revision/latest?cb=20240818094701'), // Chargez l'image depuis l'URL
                                             fit: BoxFit.cover,
                                           ),
@@ -249,12 +249,8 @@ class SearchPageState extends ConsumerState<SearchPage> with RouteAware {
                                       // Like button.
                                       AddToListButton(
                                           text: "",
-                                          iconButton: Icon(
-                                            show['liked']
-                                                ? Icons.favorite
-                                                : Icons.favorite_border,
-                                            color: const Color.fromARGB(255, 231, 81, 141),
-                                          ),
+                                          iconType: CustomIcons.like,
+                                          iconState: show['liked'] ?? false,
                                           actionFunction: () => tapHeart(context, show)),
                                     ],
                                   ),

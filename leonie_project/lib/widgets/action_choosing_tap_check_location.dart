@@ -22,10 +22,14 @@ class ActionChoosingTapCheckLocation extends StatelessWidget {
                 child: const Center(child: Text('See again')),
               ),
             ),
-            Container(
-              width: 1,
+            // Add vertical divider
+            const SizedBox(
               height: 40,
-              color: Colors.black,
+              child: VerticalDivider(
+                color: Colors.grey,
+                thickness: 1,
+                width: 40,
+              ),
             ),
             Expanded(
               child: InkWell(

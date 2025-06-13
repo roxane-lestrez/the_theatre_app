@@ -1,6 +1,7 @@
 import 'package:first_app/api_service.dart';
 import 'package:first_app/main.dart';
 import 'package:first_app/pages/login/login_page.dart';
+import 'package:first_app/utils/constants.dart';
 import 'package:first_app/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -133,6 +134,51 @@ class AccountPageState extends ConsumerState<AccountPage> with RouteAware {
     loadProductions();
   }
 
+  Widget userStatistics() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Display the number of shows liked, next to a heart icon
+        Text(
+          "${favoriteShows.length}",
+          style: const TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: 5),
+        Icon(
+          Icons.favorite,
+          color: likeIconColor,
+        ),
+
+        // Add vertical divider between different statistics
+        const SizedBox(
+          height: 40,
+          child: VerticalDivider(
+            color: Colors.grey,
+            thickness: 1,
+            width: 40,
+          ),
+        ),
+
+        // Display the number of productions seen, next to a tick icon
+        Text(
+          "${seenProductions.length}",
+          style: const TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: 5),
+        Icon(
+          Icons.check_circle,
+          color: seenIconColor,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,6 +203,8 @@ class AccountPageState extends ConsumerState<AccountPage> with RouteAware {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        const SizedBox(height: 10),
+                        profile.isNotEmpty ? userStatistics() : SizedBox(height: 1,),
                       ],
                     ),
                   ),

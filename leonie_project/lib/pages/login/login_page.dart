@@ -87,7 +87,7 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     // Save the height of the device's screen
-    final maxHeight = MediaQuery.of(context).size.height;
+    final maxHeight = MediaQuery.sizeOf(context).height;
     return Scaffold(
       appBar: AppBar(
           title: const Text('Login'),
@@ -104,7 +104,7 @@ class LoginPageState extends State<LoginPage> {
                 if (_errorMessage.isNotEmpty)
                   Text(
                     _errorMessage,
-                    style: const TextStyle(color: Colors.red),
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
           
                 SizedBox(height: maxHeight / 10),

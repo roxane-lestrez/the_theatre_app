@@ -38,7 +38,7 @@ class SeenChooserLocation extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 242, 241, 241),
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -67,16 +67,16 @@ class SeenChooserLocation extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 255, 225, 225),
+                color: Theme.of(context).colorScheme.error,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Column(
+              child: Column(
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Delete all",
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onError),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
