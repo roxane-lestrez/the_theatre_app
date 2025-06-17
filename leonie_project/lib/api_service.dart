@@ -28,6 +28,28 @@ Future callApiGet(String request) async {
   }
 }
 
+Future callApiPost(String request) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Retrieves the value of the stored cookie.
+  String? cookie = prefs.getString('almond_cookie');
+
+  if (cookie == null) {
+    return null;
+  }
+
+  final url = Uri.parse('https://tta.alwaysdata.net/$request');
+
+  final response = await http.get(
+    url,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cookie': cookie,
+    },
+  );
+  return response.statusCode;
+}
+
 Future<void> likeShow(int idShow) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 

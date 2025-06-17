@@ -1,3 +1,4 @@
+import 'package:first_app/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:first_app/pages/tabs.dart';
@@ -17,18 +18,36 @@ class SplashScreenState extends State<SplashScreen> {
     _checkAuthStatus();
   }
 
+  Future<bool> checkSessionValidity(String cookie) async {
+    final response = await callApiPost('check-session');
+    if (response != null && response.statusCode == 200) {
+      return true;
+    }
+
+    return false;
+  }
+
   Future<void> _checkAuthStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isAuthenticated = prefs.containsKey('almond_cookie');
-    // String pseudo = prefs.containsKey('pseudo');
+    final cookie = prefs.getString('almond_cookie');
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (isAuthenticated) {
+    if (cookie == null) {
+      _navigateToLoginScreen();
+      return;
+    }
+
+    try {
+      final isStillAuthenticated = await checkSessionValidity(cookie);
+      if (isStillAuthenticated) {
         _navigateToTabsScreen();
       } else {
+        prefs.remove('almond_cookie');
         _navigateToLoginScreen();
       }
-    });
+    } catch (e) {
+      prefs.remove('almond_cookie');
+      _navigateToLoginScreen();
+    }
   }
 
   void _navigateToTabsScreen() {
